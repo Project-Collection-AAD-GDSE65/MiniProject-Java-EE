@@ -1,4 +1,4 @@
-package lk.ijse.gdse65.miniproject65;
+package lk.ijse.gdse65.miniproject65.api;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebInitParam;
@@ -6,10 +6,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lk.ijse.gdse65.miniproject65.db.DBProcess;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
+import java.util.List;
 
 @WebServlet(name = "customer",urlPatterns = "/customer",
         initParams = {
@@ -59,59 +61,26 @@ public class Customer extends HttpServlet {
 
         var writer = resp.getWriter();
         resp.setContentType("text/html");
-
-
-        // save / manipulate data
-        try {
-            var ps = connection.prepareStatement(SAVE_DATA);
-            ps.setString(1, name);
-            ps.setString(2, city);
-            ps.setString(3, email);
-
-            if (ps.executeUpdate() != 0) {
-                writer.println("Data saved");
-            } else {
-                writer.println("Failed to save data");
-            }
-
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-
+        var data = new DBProcess();
+        writer.println(data.saveData(name,city,email,connection));
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        var writer = resp.getWriter();
         String id = req.getParameter("id");
         if(id == null){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }else {
 
-        var writer = resp.getWriter();
         resp.setContentType("text/html");
-        try {
-            var ps = connection.prepareStatement(GET_DATA);
-            ps.setInt(1, Integer.parseInt(id));
-            var rs = ps.executeQuery();
-            while (rs.next()){
-                int custId = rs.getInt("id");
-                String name = rs.getString("name");
-                String city = rs.getString("city");
-                String email = rs.getString("email");
-
-                System.out.println(custId);
-                System.out.println(name);
-                System.out.println(city);
-                System.out.println(email);
+        var data = new DBProcess();
+            var getData = data.getData(id, connection);
+            for (String eachData : getData){
+                writer.println(eachData+"\n");
             }
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        }
 
-
+        }
     }
 }
