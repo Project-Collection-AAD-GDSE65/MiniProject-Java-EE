@@ -9,9 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lk.ijse.gdse65.miniproject65.db.DBProcess;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.*;
-import java.util.List;
 
 @WebServlet(name = "customer",urlPatterns = "/customer",
         initParams = {
@@ -19,13 +17,12 @@ import java.util.List;
            @WebInitParam(name = "db-pw",value = "mysql"),
            @WebInitParam(name = "db-url",value = "jdbc:mysql://localhost:3306/gdse65JavaEE?createDatabaseIfNotExist=true"),
            @WebInitParam(name = "db-class",value = "com.mysql.cj.jdbc.Driver")
-        },
-        loadOnStartup = 5
-
+        }
 
 )
 public class Customer extends HttpServlet {
     Connection connection;
+
 
     private static final String SAVE_DATA = "INSERT INTO CustomerNew (NAME,CITY,EMAIL) VALUES (?,?,?)";
     private static final String GET_DATA = "SELECT * FROM CustomerNew WHERE id = ?";
@@ -33,6 +30,7 @@ public class Customer extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
+
         try {
             var user = getServletConfig().getInitParameter("db-user");
             var password = getServletConfig().getInitParameter("db-pw");
@@ -62,7 +60,7 @@ public class Customer extends HttpServlet {
         var writer = resp.getWriter();
         resp.setContentType("text/html");
         var data = new DBProcess();
-        writer.println(data.saveData(name,city,email,connection));
+        writer.println(data.saveCustomerData(name,city,email,connection));
     }
 
     @Override
@@ -75,11 +73,10 @@ public class Customer extends HttpServlet {
 
         resp.setContentType("text/html");
         var data = new DBProcess();
-            var getData = data.getData(id, connection);
+            var getData = data.getCustomerData(id, connection);
             for (String eachData : getData){
                 writer.println(eachData+"\n");
             }
-
 
         }
     }
