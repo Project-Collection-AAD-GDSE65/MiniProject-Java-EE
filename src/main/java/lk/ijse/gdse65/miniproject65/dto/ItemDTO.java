@@ -10,7 +10,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Data
 public class ItemDTO implements Serializable {
-    private String code;
     private String desc;
     private int qty;
     private double unitPrice;

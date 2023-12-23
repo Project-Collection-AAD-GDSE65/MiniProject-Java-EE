@@ -44,12 +44,20 @@ public class Item extends HttpServlet {
     }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Jsonb jsonb = JsonbBuilder.create();
-        List<ItemDTO> itemList= jsonb.fromJson(req.getReader(),new ArrayList<ItemDTO>(){
-        }.getClass().getGenericSuperclass());
-        var dbProcess = new DBProcess();
-        dbProcess.saveItem(itemList,connection);
-//        itemList.forEach(System.out::println);
+        if(req.getContentType() == null ||
+                !req.getContentType().toLowerCase().startsWith("application/json")){
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        }else {
+            Jsonb jsonb = JsonbBuilder.create();
+            List<ItemDTO> itemList= jsonb.fromJson(req.getReader(),new ArrayList<ItemDTO>(){
+            }.getClass().getGenericSuperclass());
+            var dbProcess = new DBProcess();
+            dbProcess.saveItem(itemList,connection);
+            //itemList.forEach(System.out::println);
+            jsonb.toJson(itemList,resp.getWriter());
+        }
+
+
 
 
     }

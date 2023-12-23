@@ -23,10 +23,8 @@ import java.sql.*;
 public class Customer extends HttpServlet {
     Connection connection;
 
-
     private static final String SAVE_DATA = "INSERT INTO CustomerNew (NAME,CITY,EMAIL) VALUES (?,?,?)";
     private static final String GET_DATA = "SELECT * FROM CustomerNew WHERE id = ?";
-
 
     @Override
     public void init() throws ServletException {
@@ -37,12 +35,12 @@ public class Customer extends HttpServlet {
             var url = getServletConfig().getInitParameter("db-url");
             Class.forName(getServletConfig().getInitParameter("db-class"));
             this.connection = DriverManager.getConnection(url, user, password);
-
-            System.out.println(url);
-            System.out.println(user);
-            System.out.println(password);
-
-            System.out.println("------------PARMS------------------");
+//
+//            System.out.println(url);
+//            System.out.println(user);
+//            System.out.println(password);
+//
+//            System.out.println("------------PARMS------------------");
 
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);

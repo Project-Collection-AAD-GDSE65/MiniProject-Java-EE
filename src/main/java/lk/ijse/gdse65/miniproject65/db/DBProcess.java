@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class DBProcess {
 
@@ -39,6 +40,7 @@ public class DBProcess {
             var ps = connection.prepareStatement(GET_DATA);
             ps.setInt(1, Integer.parseInt(id));
             var rs = ps.executeQuery();
+
             while (rs.next()){
                 int custId = rs.getInt("id");
                 String name = rs.getString("name");
@@ -58,10 +60,11 @@ public class DBProcess {
     }
 
     public void saveItem(List<ItemDTO> items,Connection connection){
+          String customItemId = "IT "+UUID.randomUUID();
             for(ItemDTO itemData : items){
                 try {
                     var ps = connection.prepareStatement(SAVE_ITEM_DATA);
-                    ps.setString(1, itemData.getCode());
+                    ps.setString(1, customItemId);
                     ps.setString(2, itemData.getDesc());
                     ps.setInt(3, itemData.getQty());
                     ps.setDouble(4, itemData.getUnitPrice());
