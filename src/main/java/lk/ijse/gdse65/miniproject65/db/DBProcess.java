@@ -80,4 +80,24 @@ public class DBProcess {
                 }
             }
     }
-}
+    public void saveItemOne(ItemDTO items,Connection connection){
+        String customItemId = "IT "+UUID.randomUUID();
+            try {
+                var ps = connection.prepareStatement(SAVE_ITEM_DATA);
+                ps.setString(1, customItemId);
+                ps.setString(2, items.getDesc());
+                ps.setInt(3, items.getQty());
+                ps.setDouble(4, items.getUnitPrice());
+
+                if (ps.executeUpdate() != 0) {
+                    System.out.println("Data saved");
+                } else {
+                    System.out.println("Failed to save");
+                }
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+

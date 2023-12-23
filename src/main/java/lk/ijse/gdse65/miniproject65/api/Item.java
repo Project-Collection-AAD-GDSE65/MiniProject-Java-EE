@@ -49,12 +49,16 @@ public class Item extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }else {
             Jsonb jsonb = JsonbBuilder.create();
-            List<ItemDTO> itemList= jsonb.fromJson(req.getReader(),new ArrayList<ItemDTO>(){
-            }.getClass().getGenericSuperclass());
+            var itemDTO = jsonb.fromJson(req.getReader(), ItemDTO.class);
             var dbProcess = new DBProcess();
-            dbProcess.saveItem(itemList,connection);
-            //itemList.forEach(System.out::println);
-            jsonb.toJson(itemList,resp.getWriter());
+            dbProcess.saveItemOne(itemDTO,connection);
+
+//            List<ItemDTO> itemList= jsonb.fromJson(req.getReader(),new ArrayList<ItemDTO>(){
+//            }.getClass().getGenericSuperclass());
+//            var dbProcess = new DBProcess();
+//            dbProcess.saveItem(itemList,connection);
+//            //itemList.forEach(System.out::println);
+//            jsonb.toJson(itemList,resp.getWriter());
         }
 
 
