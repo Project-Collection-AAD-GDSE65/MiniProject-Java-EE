@@ -8,12 +8,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-
-@WebFilter(urlPatterns = "/*")
-public class SecurityFilter extends HttpFilter {
+@WebFilter (urlPatterns = "/*")
+public class ABC extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-        System.out.println("Security Filter");
+        System.out.println("ABC filter");
         chain.doFilter(req,res);
     }
 }

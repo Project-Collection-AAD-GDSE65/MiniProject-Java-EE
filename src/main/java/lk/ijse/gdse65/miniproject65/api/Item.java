@@ -12,6 +12,9 @@ import lk.ijse.gdse65.miniproject65.db.DBProcess;
 import lk.ijse.gdse65.miniproject65.dto.ItemDTO;
 import org.eclipse.yasson.internal.model.JsonbCreator;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.sql.Connection;
@@ -20,26 +23,31 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "item",urlPatterns = "/item",
-        initParams = {
-                @WebInitParam(name = "db-user",value = "root"),
-                @WebInitParam(name = "db-pw",value = "mysql"),
-                @WebInitParam(name = "db-url",value = "jdbc:mysql://localhost:3306/gdse65JavaEE?createDatabaseIfNotExist=true"),
-                @WebInitParam(name = "db-class",value = "com.mysql.cj.jdbc.Driver")
-        }
+@WebServlet(name = "item",urlPatterns = "/item"
+//        initParams = {
+//                @WebInitParam(name = "db-user",value = "root"),
+//                @WebInitParam(name = "db-pw",value = "mysql"),
+//                @WebInitParam(name = "db-url",value = "jdbc:mysql://localhost:3306/gdse65JavaEE?createDatabaseIfNotExist=true"),
+//                @WebInitParam(name = "db-class",value = "com.mysql.cj.jdbc.Driver")
+//        }
 )
 public class Item extends HttpServlet {
     Connection connection;
     public void init() throws ServletException {
 
         try {
-            var user = getServletConfig().getInitParameter("db-user");
-            var password = getServletConfig().getInitParameter("db-pw");
-            var url = getServletConfig().getInitParameter("db-url");
-            Class.forName(getServletConfig().getInitParameter("db-class"));
-            this.connection = DriverManager.getConnection(url, user, password);
-        } catch (ClassNotFoundException | SQLException e) {
-            throw new RuntimeException(e);
+//            var user = getServletConfig().getInitParameter("db-user");
+//            var password = getServletConfig().getInitParameter("db-pw");
+//            var url = getServletConfig().getInitParameter("db-url");
+//            Class.forName(getServletConfig().getInitParameter("db-class"));
+//            this.connection = DriverManager.getConnection(url, user, password);
+            InitialContext ctx = new InitialContext();
+            DataSource pool = (DataSource) ctx.lookup("java:comp/env/jdbc/pos");
+            System.out.println(pool);
+            this.connection = pool.getConnection();
+
+        } catch (NamingException | SQLException e) {
+            e.printStackTrace();
         }
     }
     @Override
