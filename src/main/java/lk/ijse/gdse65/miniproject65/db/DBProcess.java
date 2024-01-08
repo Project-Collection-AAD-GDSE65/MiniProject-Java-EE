@@ -1,6 +1,8 @@
 package lk.ijse.gdse65.miniproject65.db;
 
 import lk.ijse.gdse65.miniproject65.dto.ItemDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -12,6 +14,8 @@ public class DBProcess {
 
     private static final String SAVE_DATA = "INSERT INTO CustomerNew (NAME,CITY,EMAIL) VALUES (?,?,?)";
     private static final String GET_DATA = "SELECT * FROM CustomerNew WHERE id = ?";
+
+    final static Logger logger = LoggerFactory.getLogger(DBProcess.class);
 
     private static final String SAVE_ITEM_DATA = "INSERT INTO ItemNew (CODE,DESCR,QTY,UNITPRICE) VALUES (?,?,?,?)";
     public String saveCustomerData(String name, String city, String email, Connection connection){
@@ -70,9 +74,12 @@ public class DBProcess {
                     ps.setDouble(4, itemData.getUnitPrice());
 
                     if (ps.executeUpdate() != 0) {
+
                         System.out.println("Data saved");
                     } else {
+
                         System.out.println("Failed to save");
+
                     }
 
                 } catch (SQLException e) {
@@ -90,8 +97,10 @@ public class DBProcess {
                 ps.setDouble(4, items.getUnitPrice());
 
                 if (ps.executeUpdate() != 0) {
+                    logger.info("Data saved");
                     System.out.println("Data saved");
                 } else {
+                    logger.error("Failed to save");
                     System.out.println("Failed to save");
                 }
 

@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lk.ijse.gdse65.miniproject65.db.DBProcess;
 import lk.ijse.gdse65.miniproject65.dto.ItemDTO;
 import org.eclipse.yasson.internal.model.JsonbCreator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -32,8 +34,10 @@ import java.util.List;
 //        }
 )
 public class Item extends HttpServlet {
+    final static Logger logger = LoggerFactory.getLogger(Item.class);
     Connection connection;
     public void init() throws ServletException {
+        logger.info("Init the Item Servlet");
 
         try {
 //            var user = getServletConfig().getInitParameter("db-user");
@@ -69,8 +73,6 @@ public class Item extends HttpServlet {
 //            jsonb.toJson(itemList,resp.getWriter());
         }
 
-
-
-
     }
+
 }
